@@ -1,4 +1,4 @@
-package com.example.ali.deviceregistration;
+package com.example.ali.deviceregistration.Sync;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -7,9 +7,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.ali.deviceregistration.Core.MainApp;
+
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
@@ -18,7 +19,6 @@ import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.Collection;
 
 import static android.content.Context.MODE_PRIVATE;
 

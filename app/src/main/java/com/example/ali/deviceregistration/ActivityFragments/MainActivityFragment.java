@@ -1,4 +1,4 @@
-package com.example.ali.deviceregistration;
+package com.example.ali.deviceregistration.ActivityFragments;
 
 import android.content.Context;
 import android.content.SharedPreferences;
@@ -6,7 +6,6 @@ import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
 import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
@@ -15,14 +14,15 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.telephony.TelephonyManager;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
+
+import com.example.ali.deviceregistration.Get.getDeviceData;
+import com.example.ali.deviceregistration.R;
 
 import static android.content.Context.MODE_PRIVATE;
 

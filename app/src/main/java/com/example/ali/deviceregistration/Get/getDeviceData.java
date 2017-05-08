@@ -1,10 +1,13 @@
-package com.example.ali.deviceregistration;
+package com.example.ali.deviceregistration.Get;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.example.ali.deviceregistration.Contract.deviceContract;
+import com.example.ali.deviceregistration.Core.MainApp;
 
 import org.json.JSONArray;
 import org.json.JSONException;

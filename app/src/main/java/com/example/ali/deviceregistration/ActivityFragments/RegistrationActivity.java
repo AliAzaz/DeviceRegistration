@@ -1,4 +1,4 @@
-package com.example.ali.deviceregistration;
+package com.example.ali.deviceregistration.ActivityFragments;
 
 
 import android.content.Context;
@@ -9,9 +9,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.provider.Settings;
-import android.speech.tts.Voice;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.telephony.TelephonyManager;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -21,13 +19,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.ali.deviceregistration.Contract.deviceContract;
+import com.example.ali.deviceregistration.Core.MainApp;
 import com.example.ali.deviceregistration.R;
+import com.example.ali.deviceregistration.Sync.syncDevice;
 
 import org.json.JSONException;
 
 import java.lang.reflect.Method;
-
-import static android.content.Context.MODE_PRIVATE;
 
 /**
  * A simple {@link Fragment} subclass.

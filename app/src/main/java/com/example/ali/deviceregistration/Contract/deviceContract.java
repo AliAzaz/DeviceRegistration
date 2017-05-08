@@ -1,4 +1,4 @@
-package com.example.ali.deviceregistration;
+package com.example.ali.deviceregistration.Contract;
 
 import org.json.JSONArray;
 import org.json.JSONException;

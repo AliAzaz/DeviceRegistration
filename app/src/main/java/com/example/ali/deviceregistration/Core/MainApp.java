@@ -1,8 +1,8 @@
-package com.example.ali.deviceregistration;
+package com.example.ali.deviceregistration.Core;
 
 import android.app.Application;
 
-import java.util.List;
+import com.example.ali.deviceregistration.Contract.deviceContract;
 
 /**
  * Created by ali.azaz on 5/4/2017.
