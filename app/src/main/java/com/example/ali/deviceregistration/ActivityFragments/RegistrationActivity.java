@@ -77,6 +77,9 @@ public class RegistrationActivity extends Fragment {
                         new syncData(getContext()).execute();
 
                     }
+                }else {
+                    Toast.makeText(getActivity(), "No network connection available.", Toast.LENGTH_SHORT).show();
+                    getFragmentManager().beginTransaction().replace(R.id.sectionFragment, new MainActivityFragment()).commit();
                 }
             }
         });

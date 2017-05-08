@@ -1,6 +1,8 @@
 package com.example.ali.deviceregistration.ActivityFragments;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
@@ -14,9 +16,11 @@ import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.support.v4.app.FragmentTransaction;
 import android.telephony.TelephonyManager;
+import android.text.InputType;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.ToggleButton;
@@ -33,6 +37,9 @@ public class MainActivityFragment extends Fragment {
 
     SharedPreferences sharedPref;
     SharedPreferences.Editor editor;
+
+    AlertDialog.Builder builder;
+    String m_Text= "";
 
     ToggleButton btnRegister;
     TextView txtRegister;
@@ -58,18 +65,51 @@ public class MainActivityFragment extends Fragment {
                         .setAction("Click here!", new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
-                                Toast.makeText(getContext(), "Register Button Enable", Toast.LENGTH_SHORT).show();
-                                editor.putBoolean("flag", false);
-                                editor.commit();
 
-                                btnRegister.setChecked(false);
+                                if (btnRegister.isChecked()) {
 
-                                Fragment frg = null;
-                                frg = getFragmentManager().findFragmentById(R.id.sectionFragment);
-                                final FragmentTransaction ft = getFragmentManager().beginTransaction();
-                                ft.detach(frg);
-                                ft.attach(frg);
-                                ft.commit();
+                                    builder = new AlertDialog.Builder(getActivity());
+                                    builder.setTitle("Tag Name");
+
+                                    final EditText input = new EditText(getActivity());
+                                    input.setInputType(InputType.TYPE_CLASS_TEXT);
+                                    builder.setView(input);
+
+                                    builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            m_Text = input.getText().toString();
+                                            if (m_Text.equals("admin1234")) {
+
+                                                Toast.makeText(getContext(), "Register Button Enable", Toast.LENGTH_SHORT).show();
+                                                editor.putBoolean("flag", false);
+                                                editor.commit();
+
+                                                btnRegister.setChecked(false);
+
+                                                Fragment frg = null;
+                                                frg = getFragmentManager().findFragmentById(R.id.sectionFragment);
+                                                final FragmentTransaction ft = getFragmentManager().beginTransaction();
+                                                ft.detach(frg);
+                                                ft.attach(frg);
+                                                ft.commit();
+
+                                            }else {
+                                                Toast.makeText(getContext(), "Password Incorrect", Toast.LENGTH_SHORT).show();
+                                            }
+                                        }
+                                    });
+                                    builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+                                        @Override
+                                        public void onClick(DialogInterface dialog, int which) {
+                                            dialog.cancel();
+                                        }
+                                    });
+
+
+                                }else {
+                                    Toast.makeText(getContext(), "First Register Device", Toast.LENGTH_SHORT).show();
+                                }
 
                             }
                         }).show();
@@ -104,6 +144,9 @@ public class MainActivityFragment extends Fragment {
                 NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
                 if (networkInfo != null && networkInfo.isConnected()) {
                     new syncData(getContext()).execute();
+                } else {
+                    btnRegister.setChecked(false);
+                    Toast.makeText(getActivity(), "No network connection available.", Toast.LENGTH_SHORT).show();
                 }
             }
         });
