@@ -169,8 +169,6 @@ public class RegistrationActivity extends Fragment {
             }
 
             MainApp.dc.setProjectName(txtProjectName.getText().toString());
-
-
         }
         catch (Exception e){
             Log.d("Error:",e.getMessage());

@@ -10,9 +10,9 @@ import com.example.ali.deviceregistration.Contract.deviceContract;
 
 public class MainApp extends Application {
 
-    public static final String _IP = "10.1.42.118"; // Test PHP server
+    public static final String _IP = "10.1.42.92"; // Test PHP server
     public static final Integer _PORT = 8080; // Port - with colon (:)
-    public static final String _HOST_URL = "http://" + MainApp._IP + ":" + MainApp._PORT + "/devreg/api/";
+    public static final String _HOST_URL = "http://" + MainApp._IP + ":" + MainApp._PORT + "/devicereg/api/";
 
     public static deviceContract dc;
 
