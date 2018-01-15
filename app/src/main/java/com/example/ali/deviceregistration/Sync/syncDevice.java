@@ -7,6 +7,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.example.ali.deviceregistration.Contract.DeviceContract;
 import com.example.ali.deviceregistration.Core.MainApp;
 
 import org.json.JSONArray;
@@ -62,7 +63,7 @@ public class syncDevice extends AsyncTask<Void, Void, String> {
 
         String line = "No Response";
         try {
-            String url = MainApp._HOST_URL + "devReg.php?condition=insertData";
+            String url = MainApp._HOST_URL + DeviceContract.DeviceTable._URI_SYNCDATA;
             Log.d(TAG, "doInBackground: URL " + url);
             return downloadUrl(url);
         } catch (IOException e) {
@@ -120,7 +121,7 @@ public class syncDevice extends AsyncTask<Void, Void, String> {
                 try {
                     DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
 
-//                    for (deviceContract dc : MainApp.dc) {
+//                    for (DeviceContract dc : MainApp.dc) {
 
                     if (MainApp.regFlag) {
                         jsonSync.put(MainApp.dc.toJSONObject());

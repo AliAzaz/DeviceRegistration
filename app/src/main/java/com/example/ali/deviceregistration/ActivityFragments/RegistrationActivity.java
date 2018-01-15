@@ -19,7 +19,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
-import com.example.ali.deviceregistration.Contract.deviceContract;
+import com.example.ali.deviceregistration.Contract.DeviceContract;
 import com.example.ali.deviceregistration.Core.MainApp;
 import com.example.ali.deviceregistration.R;
 import com.example.ali.deviceregistration.Sync.syncDevice;
@@ -136,7 +136,7 @@ public class RegistrationActivity extends Fragment {
     public void SaveDraft() throws JSONException {
         Toast.makeText(getContext(), "Saving Data", Toast.LENGTH_SHORT).show();
 
-        MainApp.dc = new deviceContract();
+        MainApp.dc = new DeviceContract();
 
         try {
 
@@ -158,13 +158,14 @@ public class RegistrationActivity extends Fragment {
                 Log.d("Device Id:", Settings.Secure.getString(getContext().getContentResolver(),
                         Settings.Secure.ANDROID_ID));
 
-                MainApp.dc.setDeviceid(Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID));
                 MainApp.dc.setDeviceserial(serialNumber);
                 MainApp.dc.setImei(telephonyManager.getDeviceId());
+                MainApp.dc.setDeviceid(Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID));
                 MainApp.dc.setTag(txtTagName.getText().toString());
                 MainApp.dc.setFlag("1");
             }else {
-                MainApp.dc.set_iddeviceinfo(MainApp.getdc.get_id());
+                MainApp.dc.setImei(MainApp.getdc.getImei());
+                MainApp.dc.setDeviceid(Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID));
                 MainApp.dc.setFlag("0");
             }
 

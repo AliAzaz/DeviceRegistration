@@ -136,7 +136,7 @@ public class MainActivityFragment extends Fragment {
         if (flag) {
             btnRegister.setEnabled(false);
             btnRegister.setChecked(true);
-            txtRegister.setText("Device Registered");
+            txtRegister.setText("Device Already Registered");
             txtRegister.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
 
         } else {
@@ -180,8 +180,7 @@ public class MainActivityFragment extends Fragment {
 
                 @Override
                 public void run() {
-                    new getDeviceData(getContext(), ((TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId(),
-                            Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID)).execute();
+                    new getDeviceData(getContext(), ((TelephonyManager) getContext().getSystemService(Context.TELEPHONY_SERVICE)).getDeviceId()).execute();
                 }
             });
 
@@ -196,8 +195,10 @@ public class MainActivityFragment extends Fragment {
                 @Override
                 public void run() {
 
-                    getFragmentManager().beginTransaction().replace(R.id.sectionFragment, new RegistrationActivity())
-                            .commit();
+                    try {
+                        getFragmentManager().beginTransaction().replace(R.id.sectionFragment, new RegistrationActivity())
+                                .commit();
+                    }catch (Exception e){}
                 }
             }, 1200);
         }

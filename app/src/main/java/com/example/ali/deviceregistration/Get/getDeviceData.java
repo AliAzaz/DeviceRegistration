@@ -6,7 +6,7 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.example.ali.deviceregistration.Contract.deviceContract;
+import com.example.ali.deviceregistration.Contract.DeviceContract;
 import com.example.ali.deviceregistration.Core.MainApp;
 
 import org.json.JSONArray;
@@ -42,11 +42,10 @@ public class getDeviceData extends AsyncTask<Void, Void, String> {
         return deviceId;
     }
 
-    public getDeviceData(Context context, String imei, String deviceId) {
+    public getDeviceData(Context context, String imei) {
         mContext = context;
 
         this.imei = imei;
-        this.deviceId = deviceId;
     }
 
     public static void longInfo(String str) {
@@ -72,7 +71,7 @@ public class getDeviceData extends AsyncTask<Void, Void, String> {
 
         String line = "No Response";
         try {
-            return downloadUrl(MainApp._HOST_URL + "devReg.php?condition=getData");
+            return downloadUrl(MainApp._HOST_URL + DeviceContract.DeviceTable._URI_GETDATA);
         } catch (IOException e) {
             return "Unable to upload data. Server may be down.";
         }
@@ -90,7 +89,7 @@ public class getDeviceData extends AsyncTask<Void, Void, String> {
 //            DatabaseHelper db = new DatabaseHelper(mContext);
 //            db.syncMembers(json);
 
-            MainApp.getdc = new deviceContract(json.getJSONObject(0));
+            MainApp.getdc = new DeviceContract(json.getJSONObject(0));
 
             Log.d("getdata", String.valueOf(MainApp.getdc));
 
@@ -143,7 +142,6 @@ public class getDeviceData extends AsyncTask<Void, Void, String> {
             JSONObject json = new JSONObject();
             try {
                 json.put("imei", getImei());
-                json.put("deviceid", getDeviceId());
 
             } catch (JSONException e1) {
                 e1.printStackTrace();
