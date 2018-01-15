@@ -136,7 +136,7 @@ public class MainActivityFragment extends Fragment {
         if (flag) {
             btnRegister.setEnabled(false);
             btnRegister.setChecked(true);
-            txtRegister.setText("Device Already Registered");
+            txtRegister.setText("Device Registered");
             txtRegister.setTextColor(getResources().getColor(R.color.colorPrimaryDark));
 
         } else {
