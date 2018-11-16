@@ -78,13 +78,13 @@ public class syncDevice extends AsyncTask<Void, Void, String> {
         try {
             json = new JSONArray(result);
 
-            Toast.makeText(mContext," Device Registered.", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mContext, " Device Registered.", Toast.LENGTH_SHORT).show();
 
             pd.setMessage("Device Registered.");
             pd.setTitle("Done uploading Device data");
             pd.show();
 
-            sharedPref = mContext.getSharedPreferences("register",MODE_PRIVATE);
+            sharedPref = mContext.getSharedPreferences("register", MODE_PRIVATE);
             editor = sharedPref.edit();
 
             editor.putBoolean("flag", true);
@@ -101,73 +101,73 @@ public class syncDevice extends AsyncTask<Void, Void, String> {
         }
     }
 
-    private String downloadUrl(String myurl) throws IOException {
+    private String downloadUrl(String myurl) {
         String line = "No Response";
 
+        try {
+            URL url = new URL(myurl);
+            HttpURLConnection conn = (HttpURLConnection) url.openConnection();
+            conn.setReadTimeout(20000 /* milliseconds */);
+            conn.setConnectTimeout(30000 /* milliseconds */);
+            conn.setRequestMethod("POST");
+            conn.setDoOutput(true);
+            conn.setDoInput(true);
+            conn.setRequestProperty("Content-Type", "application/json");
+            conn.setRequestProperty("charset", "utf-8");
+            conn.setUseCaches(false);
+            // Starts the query
+            conn.connect();
+            JSONArray jsonSync = new JSONArray();
             try {
-                URL url = new URL(myurl);
-                HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-                conn.setReadTimeout(20000 /* milliseconds */);
-                conn.setConnectTimeout(30000 /* milliseconds */);
-                conn.setRequestMethod("POST");
-                conn.setDoOutput(true);
-                conn.setDoInput(true);
-                conn.setRequestProperty("Content-Type", "application/json");
-                conn.setRequestProperty("charset", "utf-8");
-                conn.setUseCaches(false);
-                // Starts the query
-                conn.connect();
-                JSONArray jsonSync = new JSONArray();
-                try {
-                    DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
+                DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
 
 //                    for (DeviceContract dc : MainApp.dc) {
 
-                    if (MainApp.regFlag) {
-                        jsonSync.put(MainApp.dc.toJSONObject());
-                        Log.d("Data:", ""+MainApp.dc.toJSONObject());
-                    }else {
-                        jsonSync.put(MainApp.dc.toAlreadyJSONObject());
-                        Log.d("Data:", ""+MainApp.dc.toAlreadyJSONObject());
-                    }
+                if (MainApp.regFlag) {
+                    jsonSync.put(MainApp.dc.toJSONObject());
+                    Log.d("Data:", "" + MainApp.dc.toJSONObject());
+                } else {
+                    jsonSync.put(MainApp.dc.toAlreadyJSONObject());
+                    Log.d("Data:", "" + MainApp.dc.toAlreadyJSONObject());
+                }
 
 
 //                    }
-                    wr.writeBytes(jsonSync.toString().replace("\uFEFF", "") + "\n");
-                    longInfo(jsonSync.toString().replace("\uFEFF", "") + "\n");
-                    wr.flush();
-                } catch (JSONException e) {
-                    // TODO Auto-generated catch block
-                    e.printStackTrace();
-                }
-
-/*===================================================================*/
-                int HttpResult = conn.getResponseCode();
-                if (HttpResult == HttpURLConnection.HTTP_OK) {
-                    BufferedReader br = new BufferedReader(new InputStreamReader(
-                            conn.getInputStream(), "utf-8"));
-                    StringBuffer sb = new StringBuffer();
-
-                    while ((line = br.readLine()) != null) {
-                        sb.append(line + "\n");
-                    }
-                    br.close();
-
-                    System.out.println("" + sb.toString());
-                    return sb.toString();
-                } else {
-                    System.out.println(conn.getResponseMessage());
-                    return conn.getResponseMessage();
-                }
-            } catch (MalformedURLException e) {
-
-                e.printStackTrace();
-            } catch (IOException e) {
-
+                wr.writeBytes(jsonSync.toString().replace("\uFEFF", "") + "\n");
+                longInfo(jsonSync.toString().replace("\uFEFF", "") + "\n");
+                wr.flush();
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
                 e.printStackTrace();
             }
-        return line;
+
             /*===================================================================*/
+            int HttpResult = conn.getResponseCode();
+            if (HttpResult == HttpURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(new InputStreamReader(
+                        conn.getInputStream(), "utf-8"));
+                StringBuffer sb = new StringBuffer();
+
+                while ((line = br.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                br.close();
+
+                System.out.println("" + sb.toString());
+                return sb.toString();
+            } else {
+                System.out.println(conn.getResponseMessage());
+                return conn.getResponseMessage();
+            }
+        } catch (MalformedURLException e) {
+
+            e.printStackTrace();
+        } catch (IOException e) {
+
+            e.printStackTrace();
+        }
+        return line;
+        /*===================================================================*/
     }
 
 }

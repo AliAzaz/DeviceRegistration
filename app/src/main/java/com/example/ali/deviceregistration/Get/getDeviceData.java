@@ -2,6 +2,7 @@ package com.example.ali.deviceregistration.Get;
 
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.util.Log;
 import android.widget.Toast;
@@ -16,11 +17,12 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by ali.azaz on 5/6/2017.
@@ -31,40 +33,22 @@ public class getDeviceData extends AsyncTask<Void, Void, String> {
     private static final String TAG = "GetMembers";
     private Context mContext;
     private ProgressDialog pd;
-
-    private String imei, deviceId;
-
-    public String getImei() {
-        return imei;
-    }
-
-    public String getDeviceId() {
-        return deviceId;
-    }
+    private String imei;
 
     public getDeviceData(Context context, String imei) {
         mContext = context;
-
         this.imei = imei;
-    }
 
-    public static void longInfo(String str) {
-        if (str.length() > 4000) {
-            Log.i(TAG + "LongInfo", str.substring(0, 4000));
-            longInfo(str.substring(4000));
-        } else
-            Log.i(TAG + "LongInfo", str);
     }
 
     @Override
     protected void onPreExecute() {
         super.onPreExecute();
         pd = new ProgressDialog(mContext);
-        pd.setTitle("Please wait... Processing Members");
+        pd.setTitle("Please wait... Processing Data");
         pd.show();
 
     }
-
 
     @Override
     protected String doInBackground(Void... params) {
@@ -84,10 +68,15 @@ public class getDeviceData extends AsyncTask<Void, Void, String> {
 
         JSONArray json = null;
         try {
-            json = new JSONArray(result);
 
-//            DatabaseHelper db = new DatabaseHelper(mContext);
-//            db.syncMembers(json);
+            SharedPreferences sharedPref = mContext.getSharedPreferences("register", MODE_PRIVATE);
+            SharedPreferences.Editor editor = sharedPref.edit();
+
+            editor.putBoolean("flag", true);
+            editor.commit();
+            pd.dismiss();
+
+            json = new JSONArray(result);
 
             MainApp.getdc = new DeviceContract(json.getJSONObject(0));
 
@@ -97,28 +86,16 @@ public class getDeviceData extends AsyncTask<Void, Void, String> {
 
             pd.dismiss();
 
-//            pd.setMessage(json.length() + " Members synced.");
-//            pd.setTitle("Members: Done");
-//            pd.show();
         } catch (JSONException e) {
             e.printStackTrace();
-            Toast.makeText(mContext, "New Registration ", Toast.LENGTH_SHORT).show();
+//            Toast.makeText(mContext, "New Registration ", Toast.LENGTH_SHORT).show();
             pd.dismiss();
-
-//            pd.setMessage(result);
-//            pd.setTitle("Members Sync Failed");
-//            pd.show();
         }
 
     }
 
-    private String downloadUrl(String myurl) throws IOException {
+    private String downloadUrl(String myurl) {
         String line = "No Response";
-
-        InputStream is = null;
-        // Only display the first 500 characters of the retrieved
-        // web page content.
-        int len = 5000;
 
         HttpURLConnection conn = null;
         StringBuilder result = null;
@@ -141,14 +118,13 @@ public class getDeviceData extends AsyncTask<Void, Void, String> {
             DataOutputStream wr = new DataOutputStream(conn.getOutputStream());
             JSONObject json = new JSONObject();
             try {
-                json.put("imei", getImei());
+                json.put("imei", imei);
 
             } catch (JSONException e1) {
                 e1.printStackTrace();
             }
             Log.d(TAG, "downloadUrl: " + json.toString());
             wr.writeBytes(json.toString());
-            longInfo(jsonSync.toString().replace("\uFEFF", "") + "\n");
             wr.flush();
             wr.close();
 
@@ -179,4 +155,5 @@ public class getDeviceData extends AsyncTask<Void, Void, String> {
 
         return line;
     }
+
 }

@@ -1,14 +1,20 @@
 package com.example.ali.deviceregistration.ActivityFragments;
 
+import android.content.Context;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 import com.example.ali.deviceregistration.R;
 
 public class MainActivity extends AppCompatActivity {
+
+    public static Context mainContext = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -17,11 +23,18 @@ public class MainActivity extends AppCompatActivity {
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mainContext = this;
 
-        getSupportFragmentManager().beginTransaction().replace(R.id.sectionFragment, new MainActivityFragment())
-                .commit();
+        ConnectivityManager connMgr = (ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+        if (networkInfo != null && networkInfo.isConnected()) {
+            getSupportFragmentManager().beginTransaction().replace(R.id.sectionFragment, new MainActivityFragment())
+                    .commit();
+        } else {
+            finish();
+            Toast.makeText(this, "No network connection available.", Toast.LENGTH_LONG).show();
+        }
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

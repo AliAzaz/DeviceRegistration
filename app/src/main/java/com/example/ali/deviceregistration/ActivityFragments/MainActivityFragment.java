@@ -10,11 +10,9 @@ import android.net.NetworkInfo;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
-import android.provider.Settings;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
 import android.telephony.TelephonyManager;
 import android.text.InputType;
 import android.text.SpannableStringBuilder;
@@ -46,6 +44,7 @@ public class MainActivityFragment extends Fragment {
 
     ToggleButton btnRegister;
     TextView txtRegister;
+    static boolean flag = true;
 
     public MainActivityFragment() {
     }
@@ -57,6 +56,10 @@ public class MainActivityFragment extends Fragment {
 
         btnRegister = (ToggleButton) view.findViewById(R.id.btnRegister);
         txtRegister = (TextView) view.findViewById(R.id.txtRegister);
+
+        // SharedPreferences
+        sharedPref = getContext().getSharedPreferences("register", MODE_PRIVATE);
+        editor = sharedPref.edit();
 
         FloatingActionButton fab = (FloatingActionButton) view.findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
@@ -93,17 +96,21 @@ public class MainActivityFragment extends Fragment {
                                             if (m_Text.equals("admin1234")) {
 
                                                 Toast.makeText(getContext(), "Register Button Enable", Toast.LENGTH_SHORT).show();
-                                                editor.putBoolean("flag", false);
-                                                editor.commit();
+                                                /*editor.putBoolean("flag", false);
+                                                editor.commit();*/
 
+                                                flag = false;
+
+                                                btnRegister.setEnabled(true);
                                                 btnRegister.setChecked(false);
+                                                txtRegister.setText("Register to Another Project");
+                                                txtRegister.setTextColor(Color.RED);
 
-                                                Fragment frg = null;
-                                                frg = getFragmentManager().findFragmentById(R.id.sectionFragment);
+                                                /*Fragment frg = getFragmentManager().findFragmentById(R.id.sectionFragment);
                                                 final FragmentTransaction ft = getFragmentManager().beginTransaction();
                                                 ft.detach(frg);
                                                 ft.attach(frg);
-                                                ft.commit();
+                                                ft.commit();*/
 
                                             } else {
                                                 Toast.makeText(getContext(), "Password Incorrect", Toast.LENGTH_SHORT).show();
@@ -120,7 +127,7 @@ public class MainActivityFragment extends Fragment {
                                     builder.show();
 
                                 } else {
-                                    Toast.makeText(getContext(), "First Register Device", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(getContext(), "Device not registered..", Toast.LENGTH_SHORT).show();
                                 }
 
                             }
@@ -128,12 +135,32 @@ public class MainActivityFragment extends Fragment {
             }
         });
 
-        sharedPref = getContext().getSharedPreferences("register", MODE_PRIVATE);
-        editor = sharedPref.edit();
+        ButtonImplementor();
+
+        btnRegister.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+                if (networkInfo != null && networkInfo.isConnected()) {
+                    new syncData(getContext(), true).execute();
+                } else {
+                    btnRegister.setChecked(false);
+                    Toast.makeText(getActivity(), "No network connection available.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+
+        return view;
+    }
+
+    public void ButtonImplementor() {
 
         Boolean flag = sharedPref.getBoolean("flag", false);
 
         if (flag) {
+
             btnRegister.setEnabled(false);
             btnRegister.setChecked(true);
             txtRegister.setText("Device Registered");
@@ -146,32 +173,38 @@ public class MainActivityFragment extends Fragment {
             txtRegister.setTextColor(Color.RED);
         }
 
+    }
 
-        btnRegister.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
+    @Override
+    public void onResume() {
+        super.onResume();
 
-                ConnectivityManager connMgr = (ConnectivityManager)
-                        getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
-                NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
-                if (networkInfo != null && networkInfo.isConnected()) {
-                    new syncData(getContext()).execute();
-                } else {
-                    btnRegister.setChecked(false);
-                    Toast.makeText(getActivity(), "No network connection available.", Toast.LENGTH_SHORT).show();
-                }
+        boolean checkFlag = sharedPref.getBoolean("flag", false);
+
+        if (!checkFlag) {
+            ConnectivityManager connMgr = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+            NetworkInfo networkInfo = connMgr.getActiveNetworkInfo();
+            if (networkInfo != null && networkInfo.isConnected()) {
+                new syncData(getContext(), false).execute();
             }
-        });
+        }
 
-        return view;
+    }
+
+    @Override
+    public void onPause() {
+        flag = true;
+        super.onPause();
     }
 
     public class syncData extends AsyncTask<String, String, String> {
 
         private Context mContext;
+        private boolean flag;
 
-        public syncData(Context mContext) {
+        public syncData(Context mContext, boolean flag) {
             this.mContext = mContext;
+            this.flag = flag;
         }
 
         @Override
@@ -196,12 +229,14 @@ public class MainActivityFragment extends Fragment {
                 public void run() {
 
                     try {
-                        getFragmentManager().beginTransaction().replace(R.id.sectionFragment, new RegistrationActivity())
-                                .commit();
-                    }catch (Exception e){}
+                        if (flag)
+                            getFragmentManager().beginTransaction().replace(R.id.sectionFragment, new RegistrationActivity()).commit();
+                        else
+                            ButtonImplementor();
+                    } catch (Exception e) {
+                    }
                 }
             }, 1200);
         }
     }
-
 }

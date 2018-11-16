@@ -11,8 +11,8 @@ public class DeviceContract {
 
     String imei = "";
     String tag = "";
-    String deviceserial	 = "";
-    String deviceid	 = "";
+    String deviceserial = "";
+    String deviceid = "";
     String projectName = "";
     String flag = "";
     String _id = "";
@@ -72,12 +72,12 @@ public class DeviceContract {
     public JSONObject toJSONObject() throws JSONException {
         JSONObject json = new JSONObject();
 
-        json.put(DeviceTable.COLUMN_IMEI, this.imei== null?JSONObject.NULL:this.imei);
-        json.put(DeviceTable.COLUMN_TAG, this.tag== null?JSONObject.NULL:this.tag);
-        json.put(DeviceTable.COLUMN_DEVICE_ID, this.deviceid== null?JSONObject.NULL:this.deviceid);
-        json.put(DeviceTable.COLUMN_DEVICE_SERIAL, this.deviceserial== null?JSONObject.NULL:this.deviceserial);
-        json.put(DeviceTable.COLUMN_PROJECT_NAME, this.projectName== null?JSONObject.NULL:this.projectName);
-        json.put(DeviceTable.COLUMN_FLAG, this.flag== null?JSONObject.NULL:this.flag);
+        json.put(DeviceTable.COLUMN_IMEI, this.imei == null ? JSONObject.NULL : this.imei);
+        json.put(DeviceTable.COLUMN_TAG, this.tag == null ? JSONObject.NULL : this.tag);
+        json.put(DeviceTable.COLUMN_DEVICE_ID, this.deviceid == null ? JSONObject.NULL : this.deviceid);
+        json.put(DeviceTable.COLUMN_DEVICE_SERIAL, this.deviceserial == null ? JSONObject.NULL : this.deviceserial);
+        json.put(DeviceTable.COLUMN_PROJECT_NAME, this.projectName == null ? JSONObject.NULL : this.projectName);
+        json.put(DeviceTable.COLUMN_FLAG, this.flag == null ? JSONObject.NULL : this.flag);
 
         return json;
     }
@@ -85,10 +85,10 @@ public class DeviceContract {
     public JSONObject toAlreadyJSONObject() throws JSONException {
         JSONObject json = new JSONObject();
 
-        json.put(DeviceTable.COLUMN_IMEI, this.imei== null?JSONObject.NULL:this.imei);
-        json.put(DeviceTable.COLUMN_DEVICE_ID, this.deviceid== null?JSONObject.NULL:this.deviceid);
-        json.put(DeviceTable.COLUMN_PROJECT_NAME, this.projectName== null?JSONObject.NULL:this.projectName);
-        json.put(DeviceTable.COLUMN_FLAG, this.flag== null?JSONObject.NULL:this.flag);
+        json.put(DeviceTable.COLUMN_IMEI, this.imei == null ? JSONObject.NULL : this.imei);
+        json.put(DeviceTable.COLUMN_DEVICE_ID, this.deviceid == null ? JSONObject.NULL : this.deviceid);
+        json.put(DeviceTable.COLUMN_PROJECT_NAME, this.projectName == null ? JSONObject.NULL : this.projectName);
+        json.put(DeviceTable.COLUMN_FLAG, this.flag == null ? JSONObject.NULL : this.flag);
 
         return json;
     }

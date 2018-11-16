@@ -51,12 +51,13 @@ public class RegistrationActivity extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view =  inflater.inflate(R.layout.fragment_registration, container, false);
+        View view = inflater.inflate(R.layout.fragment_registration, container, false);
 
-        txtProjectName = (EditText)view.findViewById(R.id.txtProjectName);
-        txtTagName = (EditText)view.findViewById(R.id.txtTagName);
+        txtProjectName = (EditText) view.findViewById(R.id.txtProjectName);
+        txtTagName = (EditText) view.findViewById(R.id.txtTagName);
         btnContinue = (Button) view.findViewById(R.id.btnContinue);
 
+        txtProjectName.setText(MainApp.projectName);
         btnContinue.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -77,14 +78,12 @@ public class RegistrationActivity extends Fragment {
                         new syncData(getContext()).execute();
 
                     }
-                }else {
+                } else {
                     Toast.makeText(getActivity(), "No network connection available.", Toast.LENGTH_SHORT).show();
                     getFragmentManager().beginTransaction().replace(R.id.sectionFragment, new MainActivityFragment()).commit();
                 }
             }
         });
-
-
 
 
         return view;
@@ -94,21 +93,21 @@ public class RegistrationActivity extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        if (MainApp.getdc != null){
+        if (MainApp.getdc != null) {
 
             MainApp.regFlag = false;
 
             txtTagName.setText(MainApp.getdc.getTag());
             txtTagName.setEnabled(false);
 
-        }else {
+        } else {
             MainApp.regFlag = true;
             txtTagName.setEnabled(true);
         }
 
     }
 
-    public boolean validation(){
+    public boolean validation() {
 
         if (txtProjectName.getText().toString().isEmpty()) {
             Toast.makeText(getContext(), "ERROR(empty): Project Name Required", Toast.LENGTH_SHORT).show();
@@ -133,7 +132,7 @@ public class RegistrationActivity extends Fragment {
         return true;
     }
 
-    public void SaveDraft() throws JSONException {
+    public void SaveDraft() {
         Toast.makeText(getContext(), "Saving Data", Toast.LENGTH_SHORT).show();
 
         MainApp.dc = new DeviceContract();
@@ -163,16 +162,15 @@ public class RegistrationActivity extends Fragment {
                 MainApp.dc.setDeviceid(Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID));
                 MainApp.dc.setTag(txtTagName.getText().toString());
                 MainApp.dc.setFlag("1");
-            }else {
+            } else {
                 MainApp.dc.setImei(MainApp.getdc.getImei());
                 MainApp.dc.setDeviceid(Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID));
                 MainApp.dc.setFlag("0");
             }
 
             MainApp.dc.setProjectName(txtProjectName.getText().toString());
-        }
-        catch (Exception e){
-            Log.d("Error:",e.getMessage());
+        } catch (Exception e) {
+            Log.d("Error:", e.getMessage());
         }
 
 
@@ -192,7 +190,7 @@ public class RegistrationActivity extends Fragment {
 
                 @Override
                 public void run() {
-                    Toast.makeText(getContext(), "Device Registered", Toast.LENGTH_LONG).show();
+                    //Toast.makeText(getContext(), "Device Registered", Toast.LENGTH_LONG).show();
                     new syncDevice(mContext).execute();
                 }
             });
