@@ -24,8 +24,6 @@ import com.example.ali.deviceregistration.Core.MainApp;
 import com.example.ali.deviceregistration.R;
 import com.example.ali.deviceregistration.Sync.syncDevice;
 
-import org.json.JSONException;
-
 import java.lang.reflect.Method;
 
 /**
@@ -69,11 +67,7 @@ public class RegistrationActivity extends Fragment {
 
                     if (validation()) {
 
-                        try {
-                            SaveDraft();
-                        } catch (JSONException e) {
-                            e.printStackTrace();
-                        }
+                        SaveDraft();
 
                         new syncData(getContext()).execute();
 
