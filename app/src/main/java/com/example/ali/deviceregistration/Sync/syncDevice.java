@@ -74,18 +74,24 @@ public class syncDevice extends AsyncTask<Void, Void, String> {
         try {
             json = new JSONArray(result);
 
-            Toast.makeText(mContext, " Device Registered.", Toast.LENGTH_SHORT).show();
+            if (json.getJSONObject(0).getString("status").equals("1")) {
 
-            pd.setMessage("Device Registered.");
-            pd.setTitle("Done uploading Device data");
-            pd.show();
+                Toast.makeText(mContext, " Device Registered.", Toast.LENGTH_SHORT).show();
 
-            sharedPref = mContext.getSharedPreferences("register", MODE_PRIVATE);
-            editor = sharedPref.edit();
+                pd.setMessage("Device Registered.");
+                pd.setTitle("Done uploading Device data");
+                pd.show();
 
-            editor.putBoolean("flag", true);
-            editor.commit();
+                sharedPref = mContext.getSharedPreferences("register", MODE_PRIVATE);
+                editor = sharedPref.edit();
 
+                editor.putBoolean("flag", true);
+                editor.commit();
+            } else {
+                pd.setMessage(result);
+                pd.setTitle("Device's Sync Failed");
+                pd.show();
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();

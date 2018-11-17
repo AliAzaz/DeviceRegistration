@@ -65,22 +65,27 @@ public class getDeviceData extends AsyncTask<Void, Void, String> {
         JSONArray json = null;
         try {
 
-            SharedPreferences sharedPref = mContext.getSharedPreferences("register", MODE_PRIVATE);
-            SharedPreferences.Editor editor = sharedPref.edit();
-
-            editor.putBoolean("flag", true);
-            editor.commit();
-            pd.dismiss();
-
             json = new JSONArray(result);
 
-            MainApp.getdc = new DeviceContract(json.getJSONObject(0));
+            if (json.length() != 0) {
 
-            Log.d("getdata", String.valueOf(MainApp.getdc));
+                SharedPreferences sharedPref = mContext.getSharedPreferences("register", MODE_PRIVATE);
+                SharedPreferences.Editor editor = sharedPref.edit();
 
-            Toast.makeText(mContext, "Successfully Get Data ", Toast.LENGTH_SHORT).show();
+                editor.putBoolean("flag", true);
+                editor.commit();
+                pd.dismiss();
 
-            pd.dismiss();
+                MainApp.getdc = new DeviceContract(json.getJSONObject(0));
+
+                Log.d("getdata", String.valueOf(MainApp.getdc));
+
+                Toast.makeText(mContext, "Successfully Get Data ", Toast.LENGTH_SHORT).show();
+
+                pd.dismiss();
+            } else {
+                pd.dismiss();
+            }
 
         } catch (JSONException e) {
             e.printStackTrace();
