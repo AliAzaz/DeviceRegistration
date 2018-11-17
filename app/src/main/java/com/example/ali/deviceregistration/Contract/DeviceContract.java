@@ -86,6 +86,7 @@ public class DeviceContract {
         JSONObject json = new JSONObject();
 
         json.put(DeviceTable.COLUMN_IMEI, this.imei == null ? JSONObject.NULL : this.imei);
+        json.put(DeviceTable.COLUMN_DEVICE_SERIAL, this.deviceserial == null ? JSONObject.NULL : this.deviceserial);
         json.put(DeviceTable.COLUMN_DEVICE_ID, this.deviceid == null ? JSONObject.NULL : this.deviceid);
         json.put(DeviceTable.COLUMN_PROJECT_NAME, this.projectName == null ? JSONObject.NULL : this.projectName);
         json.put(DeviceTable.COLUMN_FLAG, this.flag == null ? JSONObject.NULL : this.flag);

@@ -158,6 +158,7 @@ public class RegistrationActivity extends Fragment {
                 MainApp.dc.setFlag("1");
             } else {
                 MainApp.dc.setImei(MainApp.getdc.getImei());
+                MainApp.dc.setDeviceserial(MainApp.getdc.getDeviceserial());
                 MainApp.dc.setDeviceid(Settings.Secure.getString(getContext().getContentResolver(), Settings.Secure.ANDROID_ID));
                 MainApp.dc.setFlag("0");
             }
